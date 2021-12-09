@@ -11,49 +11,28 @@ extend google.protobuf.FieldOptions {
 
 message FieldDft {
   oneof dft {
-    // scalar field types
-    FloatDft    float    = 1;
-    DoubleDft   double   = 2;
-    Int32Dft    int32    = 3;
-    Int64Dft    int64    = 4;
-    UInt32Dft   uint32   = 5;
-    UInt64Dft   uint64   = 6;
-    SInt32Dft   sint32   = 7;
-    SInt64Dft   sint64   = 8;
-    Fixed32Dft  fixed32  = 9;
-    Fixed64Dft  fixed64  = 10;
-    SFixed32Dft sfixed32 = 11;
-    SFixed64Dft sfixed64 = 12;
-    BoolDft     bool     = 13;
-    StringDft   string   = 14;
-    BytesDft    bytes    = 15;
+    double number = 1;
+    string string = 2;
 
-    // complex field types
-    EnumDft enum = 16;
+    NumberValues numbers = 3;
+    StringValues strings = 4;
 
-    // well-known field types
-    DurationDft  duration  = 21;
-    TimestampDft timestamp = 22;
+    string json = 5;
   };
 }
 
-message FloatDft{ float dft = 1; }
-message DoubleDft{ double dft = 1; }
-message Int32Dft{ int32 dft = 1; }
-message Int64Dft{ int64 dft = 1; }
-message UInt32Dft{ uint32 dft = 1; }
-message UInt64Dft{ uint64 dft = 1; }
-message SInt32Dft{ sint32 dft = 1; } 
-message SInt64Dft{ sint64 dft = 1; }
-message Fixed32Dft{ fixed32 dft = 1; }
-message Fixed64Dft{ fixed64 dft = 1; }
-message SFixed32Dft{ sfixed32 dft = 1; }
-message SFixed64Dft{ sfixed64 dft = 1; }
-message BoolDft{ bool dft = 1; }
-message StringDft{ string dft = 1; }
-message BytesDft{ bytes dft = 1; }
+message NumberValues {
+  string values = 1;
+  // default ,
+  string sep = 2;
+  // default space
+  string trim = 3;
+}
 
-message EnumDft{ int32 dft = 1; }
-
-message DurationDft{}
-message TimestampDft{}
+message StringValues {
+  string values = 1;
+  // default ,
+  string sep = 2;
+  // default space
+  string trim = 3;
+}
