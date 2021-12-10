@@ -3,6 +3,10 @@
 
 package basic
 
+import (
+	"google.golang.org/protobuf/encoding/protojson"
+)
+
 func (m *Everything) SetDefault() {
 	if m == nil {
 		return
@@ -32,6 +36,21 @@ func (m *Everything) SetDefault() {
 		m.StringValues = append(m.StringValues, "A", "B", "C")
 	}
 
+	if m.GetStructValue() == nil {
+		_ = protojson.Unmarshal([]byte(`{name: "j2gg0s", age: 18}`), m.StructValue)
+	}
+
 	// NoneValue has not default.
+
+}
+
+func (m *Foo) SetDefault() {
+	if m == nil {
+		return
+	}
+
+	// Name has not default.
+
+	// Age has not default.
 
 }

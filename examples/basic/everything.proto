@@ -14,5 +14,12 @@ message Everything {
   repeated int64 int64_values = 5 [(dft.dft).numbers.values = "1, 2, 3"];
   repeated string string_values = 6 [(dft.dft).strings = {values: "A, B, C"}];
 
+  Foo struct_value = 7 [(dft.dft).json = "{name: \"j2gg0s\", age: 18}"];
+
   double none_value = 15;
+}
+
+message Foo {
+  string name = 1;
+  int32 age = 2;
 }

@@ -13,19 +13,19 @@ import (
 	"github.com/j2gg0s/protoc-gen-dft/dft"
 )
 
-type RuleContext struct {
+type DftContext struct {
 	Field pgs.Field
 	Typ   string
 	Val   interface{}
 }
 
-func rulesContext(f pgs.Field) (RuleContext, error) {
+func dftContext(f pgs.Field) (DftContext, error) {
 	var dftVal dft.FieldDft
 	_, err := f.Extension(dft.E_Dft, &dftVal)
 	if err != nil {
-		return RuleContext{}, err
+		return DftContext{}, err
 	}
-	out := RuleContext{
+	out := DftContext{
 		Field: f,
 	}
 
@@ -33,6 +33,8 @@ func rulesContext(f pgs.Field) (RuleContext, error) {
 	switch r := dftVal.GetDft().(type) {
 	case *dft.FieldDft_Number:
 		out.Typ, out.Val = "number", r.Number
+	case *dft.FieldDft_String_:
+		out.Typ, out.Val = "string", r.String_
 	case *dft.FieldDft_Numbers:
 		if len(r.Numbers.GetSep()) > 0 {
 			sep = r.Numbers.GetSep()
@@ -61,8 +63,8 @@ func rulesContext(f pgs.Field) (RuleContext, error) {
 			strs = append(strs, strings.Trim(str, trim))
 		}
 		out.Typ, out.Val = "strings", strs
-	case *dft.FieldDft_String_:
-		out.Typ, out.Val = "string", r.String_
+	case *dft.FieldDft_Json:
+		out.Typ, out.Val = "json", r.Json
 	default:
 		out.Typ = "none"
 	}
@@ -70,8 +72,8 @@ func rulesContext(f pgs.Field) (RuleContext, error) {
 	return out, nil
 }
 
-func render(tpl *template.Template) func(ctx RuleContext) (string, error) {
-	return func(ctx RuleContext) (string, error) {
+func render(tpl *template.Template) func(ctx DftContext) (string, error) {
+	return func(ctx DftContext) (string, error) {
 		var b bytes.Buffer
 		err := tpl.ExecuteTemplate(&b, ctx.Typ, ctx)
 		return b.String(), err
@@ -80,7 +82,7 @@ func render(tpl *template.Template) func(ctx RuleContext) (string, error) {
 
 type goSharedFuncs struct{ pgsgo.Context }
 
-func (fns goSharedFuncs) accessor(ctx RuleContext) string {
+func (fns goSharedFuncs) accessor(ctx DftContext) string {
 	return fmt.Sprintf("m.Get%s()", fns.Name(ctx.Field))
 }
 
